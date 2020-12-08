@@ -1,17 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+class Connect extends React.Component {
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      board: [],
+      player1: 1,
+      player2: 2,
+      currentPlayer: null,
+      gameOver: false
+    }
+  }
+
+  createBoard() {
+    let board = [];
+    for (let r = 0; r < 6; r++) {
+      let row = [];
+      for (let c = 0; c < 7; c++) { 
+        row.push(null); 
+      }
+      board.push(row);
+    }
+  }
+}
+
+// ========================================
+  
+ReactDOM.render(<Connect />, document.getElementById("root"));
