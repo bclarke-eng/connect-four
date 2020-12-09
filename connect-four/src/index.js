@@ -2,37 +2,76 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class Circle extends React.Component {
-  render() {
-    return (
-      <button className="circle">
-        X
-      </button>
-    );
+function Circle(props) {
+  return (
+    <button className="circle" onClick={props.onClick}>
+      {props.value}
+    </button>
+  );
+}
+
+function DropPiece(column, board) {
+  for (let row = 5; row >= 0; row--) {
+    if (board[row][column] == null) {
+      return row;
+    }
   }
+  return null;
+}
+
+function CreateArray(rows) {
+  var array = [null];
+
+  for (var i=0; i < rows; i++) {
+    array[i] = [null];
+  }
+
+  return array;
 }
 
 class Board extends React.Component {
-  renderCircle(i) {
-    return <Circle />;
+  constructor(props) {
+    super(props);
+    this.state = {
+      circles: CreateArray(6),
+      redIsNext: true,
+    };
   }
 
+  handleClick(column) {
+    const circles = this.state.circles.slice();
+    let row = DropPiece(column, circles)
+    circles[row][column] = this.state.redIsNext ? 'R' : 'Y';
+    this.setState({
+      circles: circles,
+      redIsNext: !this.state.redIsNext,
+    });
+  }
 
-  render() {
-    const status = 'Next player: Red';
-	let circles = [];
-	for (let row = 0; row < 6; row++){
-			let row = [];
-			for (let column = 0;  column < 7; column++) {
-				row.push(this.renderCircle(column));
-			}
-			circles.push(<div className="board-row">{row}</div>);
-		}
+  renderCircle(row, column) {
     return (
-      <div>
-        <div className="status">{status}</div>
-			{circles}
-      </div>
+      <Circle
+        value={this.state.circles[row][column]}
+        onClick={() => this.handleClick(column)}
+      />
+    );
+  }
+
+    render() {
+      const status = 'Next player: ' + (this.state.redIsNext ? 'R' : 'Y');
+      let circles = [];
+      for (let row = 0; row < 6; row++){
+        let rows = [];
+        for (let column = 0;  column < 7; column++) {
+          rows.push(this.renderCircle(row, column));
+        }
+        circles.push(<div className="board-row">{rows}</div>);
+      }
+      return (
+        <div>
+          <div className="status">{status}</div>
+          {circles}
+        </div>
     );
   }
 }
