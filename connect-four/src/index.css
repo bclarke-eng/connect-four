@@ -1,5 +1,14 @@
+@import url('https://fonts.googleapis.com/css?family=Rancho&effect=fire-animation|neon');
+
+:root {
+  /* Base font size */
+  font-size: 10px;
+  /* Set neon color */
+  --neon-text-color: #ff073a;
+  --neon-border-color: #08f;
+}
+
 body {
-  font: 14px "Century Gothic", Futura, sans-serif;
   margin: 20px;
 }
 
