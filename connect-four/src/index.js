@@ -3,10 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function Circle(props) {
+  let className = "" 
+  if (props.value === "R") {
+    className = "circle-red"
+  } else if (props.value === "Y") {
+    className = "circle-yellow"
+  } else {
+    className = "circle"
+  }
   return (
-    <button className="circle" onClick={props.onClick}>
-      {props.value}
-    </button>
+    <button className={className} onClick={props.onClick}></button>
   );
 }
 
@@ -29,24 +35,51 @@ function CreateArray(rows) {
   return array;
 }
 
+function CheckVertical(board, row, column) {
+  let counter = 1
+  if (row <= 2) {
+    while (row < 5) {
+      if (board[row][column] === board[row+1][column]) {
+        row++;
+        counter++;
+        if (counter === 4) {
+          return true;
+        }
+      } else {
+        return false;
+      }
+    }
+  } else {
+    return false;
+  }
+}
+
 class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       circles: CreateArray(6),
       redIsNext: true,
+      gameOver: false
     };
   }
 
   handleClick(column) {
     const circles = this.state.circles.slice();
-    let row = DropPiece(column, circles)
-    if (row != null) {
-      circles[row][column] = this.state.redIsNext ? 'R' : 'Y';
-      this.setState({
-        circles: circles,
-        redIsNext: !this.state.redIsNext,
-      });
+    if (!this.state.gameOver) {
+      let row = DropPiece(column, circles)
+      if (row != null) {
+        circles[row][column] = this.state.redIsNext ? 'R' : 'Y';
+        this.setState({
+          circles: circles,
+          redIsNext: !this.state.redIsNext,
+        });
+      }
+      if (CheckVertical(circles, row, column)){
+        this.setState({
+          gameOver: true,
+        })
+      }
     }
   }
 
@@ -60,7 +93,12 @@ class Board extends React.Component {
   }
 
     render() {
-      const status = 'Next player: ' + (this.state.redIsNext ? 'R' : 'Y');
+      let status = ""
+      if (this.state.gameOver) {
+        status = "Game Over! Winner: " + (this.state.redIsNext ? 'Y' : 'R')
+      } else {
+        status = 'Next player: ' + (this.state.redIsNext ? 'R' : 'Y');
+      }
       let circles = [];
       for (let row = 0; row < 6; row++){
         let rows = [];
