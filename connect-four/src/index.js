@@ -41,11 +41,13 @@ class Board extends React.Component {
   handleClick(column) {
     const circles = this.state.circles.slice();
     let row = DropPiece(column, circles)
-    circles[row][column] = this.state.redIsNext ? 'R' : 'Y';
-    this.setState({
-      circles: circles,
-      redIsNext: !this.state.redIsNext,
-    });
+    if (row != null) {
+      circles[row][column] = this.state.redIsNext ? 'R' : 'Y';
+      this.setState({
+        circles: circles,
+        redIsNext: !this.state.redIsNext,
+      });
+    }
   }
 
   renderCircle(row, column) {
