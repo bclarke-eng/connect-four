@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import * as winner from './checkWinner.js';
 
 function Circle(props) {
   let className = "" 
@@ -35,32 +36,14 @@ function CreateArray(rows) {
   return array;
 }
 
-function CheckVertical(board, row, column) {
-  let counter = 1
-  if (row <= 2) {
-    while (row < 5) {
-      if (board[row][column] === board[row+1][column]) {
-        row++;
-        counter++;
-        if (counter === 4) {
-          return true;
-        }
-      } else {
-        return false;
-      }
-    }
-  } else {
-    return false;
-  }
-}
-
 class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       circles: CreateArray(6),
       redIsNext: true,
-      gameOver: false
+      gameOver: false,
+      draw: false,
     };
   }
 
@@ -75,9 +58,15 @@ class Board extends React.Component {
           redIsNext: !this.state.redIsNext,
         });
       }
-      if (CheckVertical(circles, row, column)){
+      if (winner.CheckVertical(circles, row, column) || 
+          winner.CheckHorizontal(circles, row, column) ||
+          winner.CheckDiagonal(circles, row, column)) {
         this.setState({
           gameOver: true,
+        })
+      } else if (winner.CheckDraw(circles)) {
+        this.setState({
+          draw: true,
         })
       }
     }
@@ -96,6 +85,8 @@ class Board extends React.Component {
       let status = ""
       if (this.state.gameOver) {
         status = "Game Over! Winner: " + (this.state.redIsNext ? 'Y' : 'R')
+      } else if (this.state.draw) {
+        status = "Game Over! It's a Draw!";
       } else {
         status = 'Next player: ' + (this.state.redIsNext ? 'R' : 'Y');
       }
