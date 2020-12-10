@@ -123,13 +123,13 @@ class Game extends React.Component {
 
     return (
     <div>
-      <h1>{status}</h1>
+    <div><h1>{status}</h1></div>
       <div className="game">
-        <div className="game-board">
-          <Board circles={circles} onClick={(column) => this.handleClick(column)}/>
-        </div>
+          <div className="game-board">
+            <Board circles={circles} onClick={(column) => this.handleClick(column)}/>
+          </div>
       </div>
-      <button onClick={() => this.resetGame()}>Restart Game</button>
+      <div className="game-button"><button onClick={() => this.resetGame()}>Restart Game</button></div>
      </div>
     );
   }

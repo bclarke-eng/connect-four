@@ -35,14 +35,10 @@ ol, ul {
   font-weight: bold;
   line-height: 34px;
   height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
   padding: 0;
   text-align: center;
   width: 34px;
-  margin-bottom: 5px;
-  margin-right: 2.5px;
-  margin-left: 2.5px;
+  margin: 2.5px;
 }
 
 .circle-red {
@@ -54,13 +50,10 @@ ol, ul {
   font-weight: bold;
   line-height: 34px;
   height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
   padding: 0;
   text-align: center;
   width: 34px;
-  margin-bottom: 5px;
-  margin-right: 5px;
+  margin: 2.5px;
 }
 
 .circle-yellow {
@@ -72,13 +65,10 @@ ol, ul {
   font-weight: bold;
   line-height: 34px;
   height: 34px;
-  margin-right: -1px;
-  margin-top: -1px;
   padding: 0;
   text-align: center;
   width: 34px;
-  margin-bottom: 5px;
-  margin-right: 5px;
+  margin: 2.5px;
 }
 
 .circle:focus {
@@ -92,6 +82,8 @@ ol, ul {
 .game {
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 .game-info {
@@ -100,4 +92,16 @@ ol, ul {
 
 .game-board {
   background: #50C8FF;
+}
+
+h1 {
+  text-align: center;
+}
+
+.game-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
 }
