@@ -37,18 +37,51 @@ function CreateArray(rows) {
 }
 
 class Board extends React.Component {
+
+  renderCircle(row, column) {
+    return (
+      <Circle
+        value={this.props.circles[row][column]}
+        onClick={() => this.props.onClick(column)}
+      />
+    );
+  }
+
+    render() {
+      let circles = [];
+      for (let row = 0; row < 6; row++){
+        let rows = [];
+        for (let column = 0;  column < 7; column++) {
+          rows.push(this.renderCircle(row, column));
+        }
+        circles.push(<div className="board-row">{rows}</div>);
+      }
+      return (
+        <div>
+          {circles}
+        </div>
+    );
+  }
+}
+
+class Game extends React.Component {
   constructor(props) {
-    super(props);
-    const callbacks = this.props.callbacks;
-    if (callbacks != null) {
-      callbacks.resetGame = this.resetGame.bind(this);
-    }
-    this.state = {
+      super(props);
+      this.state = {
       circles: CreateArray(6),
       redIsNext: true,
       gameOver: false,
       draw: false,
     };
+  }
+
+  resetGame() {
+    this.setState({
+      circles: CreateArray(6),
+      redIsNext: true,
+      gameOver: false,
+      draw: false,
+    })
   }
 
   handleClick(column) {
@@ -62,7 +95,7 @@ class Board extends React.Component {
           redIsNext: !this.state.redIsNext,
         });
       }
-      if (winner.CheckVertical(circles, row, column) || 
+      if (winner.CheckVertical(circles, row, column) ||
           winner.CheckHorizontal(circles, row, column) ||
           winner.CheckDiagonal(circles, row, column)) {
         this.setState({
@@ -76,26 +109,10 @@ class Board extends React.Component {
     }
   }
 
-  renderCircle(row, column) {
-    return (
-      <Circle
-        value={this.state.circles[row][column]}
-        onClick={() => this.handleClick(column)}
-      />
-    );
-  }
+  render() {
+  const circles = this.state.circles;
 
-  resetGame() {
-    this.setState({
-      circles: CreateArray(6),
-      redIsNext: true,
-      gameOver: false,
-      draw: false,
-    })
-  }
-
-    render() {
-      let status = ""
+  let status = ""
       if (this.state.gameOver) {
         status = "Game Over! Winner: " + (this.state.redIsNext ? 'Yellow' : 'Red')
       } else if (this.state.draw) {
@@ -103,41 +120,13 @@ class Board extends React.Component {
       } else {
         status = 'Next player: ' + (this.state.redIsNext ? 'Red' : 'Yellow');
       }
-      let circles = [];
-      for (let row = 0; row < 6; row++){
-        let rows = [];
-        for (let column = 0;  column < 7; column++) {
-          rows.push(this.renderCircle(row, column));
-        }
-        circles.push(<div className="board-row">{rows}</div>);
-      }
-      return (
-        <div>
-          <div>{status}</div>
-          {circles}
-        </div>
-    );
-  }
-}
 
-class Game extends React.Component {
-  constructor(props) {
-      super(props);
-      this.callbacks = {};
-  }
-
-  resetGame() {
-      if (this.callbacks.resetGame != null) {
-          this.callbacks.resetGame();
-      }
-  }
-
-  render() {
     return (
     <div>
+      <h1>{status}</h1>
       <div className="game">
         <div className="game-board">
-          <Board callbacks={this.callbacks}/>
+          <Board circles={circles} onClick={(column) => this.handleClick(column)}/>
         </div>
       </div>
       <button onClick={() => this.resetGame()}>Restart Game</button>
