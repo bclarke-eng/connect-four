@@ -5,9 +5,9 @@ import * as winner from './checkWinner.js';
 
 function Circle(props) {
   let className = "" 
-  if (props.value === "R") {
+  if (props.value === "Red") {
     className = "circle-red"
-  } else if (props.value === "Y") {
+  } else if (props.value === "Yellow") {
     className = "circle-yellow"
   } else {
     className = "circle"
@@ -39,6 +39,10 @@ function CreateArray(rows) {
 class Board extends React.Component {
   constructor(props) {
     super(props);
+    const callbacks = this.props.callbacks;
+    if (callbacks != null) {
+      callbacks.resetGame = this.resetGame.bind(this);
+    }
     this.state = {
       circles: CreateArray(6),
       redIsNext: true,
@@ -52,7 +56,7 @@ class Board extends React.Component {
     if (!this.state.gameOver) {
       let row = DropPiece(column, circles)
       if (row != null) {
-        circles[row][column] = this.state.redIsNext ? 'R' : 'Y';
+        circles[row][column] = this.state.redIsNext ? 'Red' : 'Yellow';
         this.setState({
           circles: circles,
           redIsNext: !this.state.redIsNext,
@@ -93,11 +97,11 @@ class Board extends React.Component {
     render() {
       let status = ""
       if (this.state.gameOver) {
-        status = "Game Over! Winner: " + (this.state.redIsNext ? 'Y' : 'R')
+        status = "Game Over! Winner: " + (this.state.redIsNext ? 'Yellow' : 'Red')
       } else if (this.state.draw) {
         status = "Game Over! It's a Draw!";
       } else {
-        status = 'Next player: ' + (this.state.redIsNext ? 'R' : 'Y');
+        status = 'Next player: ' + (this.state.redIsNext ? 'Red' : 'Yellow');
       }
       let circles = [];
       for (let row = 0; row < 6; row++){
@@ -109,22 +113,35 @@ class Board extends React.Component {
       }
       return (
         <div>
-          <div className="status font-effect-fire-animation">{status}</div>
+          <div>{status}</div>
           {circles}
-          <button onClick={() => this.resetGame()}>Restart Game</button>
         </div>
     );
   }
 }
 
 class Game extends React.Component {
+  constructor(props) {
+      super(props);
+      this.callbacks = {};
+  }
+
+  resetGame() {
+      if (this.callbacks.resetGame != null) {
+          this.callbacks.resetGame();
+      }
+  }
+
   render() {
     return (
+    <div>
       <div className="game">
         <div className="game-board">
-          <Board />
+          <Board callbacks={this.callbacks}/>
         </div>
       </div>
+      <button onClick={() => this.resetGame()}>Restart Game</button>
+     </div>
     );
   }
 }

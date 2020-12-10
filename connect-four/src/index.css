@@ -41,7 +41,8 @@ ol, ul {
   text-align: center;
   width: 34px;
   margin-bottom: 5px;
-  margin-right: 5px;
+  margin-right: 2.5px;
+  margin-left: 2.5px;
 }
 
 .circle-red {
@@ -95,4 +96,8 @@ ol, ul {
 
 .game-info {
   margin-left: 20px;
+}
+
+.game-board {
+  background: #50C8FF;
 }
